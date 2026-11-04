@@ -1,0 +1,114 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const FruitApp());
+}
+
+class FruitApp extends StatelessWidget {
+  const FruitApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Fruit List',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.green),
+      home: const FruitListPage(),
+    );
+  }
+}
+
+class Fruit {
+  final String name;
+  final String detail;
+  final IconData icon;
+  final Color color;
+
+  const Fruit({
+    required this.name,
+    required this.detail,
+    required this.icon,
+    required this.color,
+  });
+}
+
+class FruitListPage extends StatelessWidget {
+  const FruitListPage({super.key});
+
+  final List<Fruit> fruits = const [
+    Fruit(name: 'Apple', detail: 'Red | Rs. 180 per kg', icon: Icons.apple, color: Colors.red),
+    Fruit(name: 'Banana', detail: 'Yellow | Rs. 60 per dozen', icon: Icons.eco, color: Colors.amber),
+    Fruit(name: 'Orange', detail: 'Orange | Rs. 90 per kg', icon: Icons.circle, color: Colors.orange),
+    Fruit(name: 'Grapes', detail: 'Purple | Rs. 120 per kg', icon: Icons.bubble_chart, color: Colors.purple),
+    Fruit(name: 'Mango', detail: 'Yellow | Rs. 150 per kg', icon: Icons.local_florist, color: Colors.deepOrange),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Fruit List'),
+        centerTitle: true,
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(8),
+        itemCount: fruits.length,
+        itemBuilder: (context, index) {
+          return FruitCard(fruit: fruits[index]);
+        },
+      ),
+    );
+  }
+}
+
+class FruitCard extends StatelessWidget {
+  final Fruit fruit;
+
+  const FruitCard({super.key, required this.fruit});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: fruit.color.withOpacity(0.2),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(fruit.icon, color: fruit.color, size: 32),
+            ),
+            const SizedBox(width: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  fruit.name,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  fruit.detail,
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+does this code has widgets and layouts?
