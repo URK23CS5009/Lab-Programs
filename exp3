@@ -1,0 +1,137 @@
+import 'package:flutter/material.dart'; void main() {
+runApp(const MyApp());
+}
+class MyApp extends StatelessWidget { const MyApp({super.key}); @override
+Widget build(BuildContext context) { return const MaterialApp( debugShowCheckedModeBanner: false, home: ProductPage(),
+);
+ 
+}
+}
+
+
+class ProductPage extends StatefulWidget { const ProductPage({super.key});
+
+@override
+State<ProductPage> createState() => _ProductPageState();
+}
+
+
+class _ProductPageState extends State<ProductPage> {
+
+
+final List<Map<String, String>> products = [
+{'name': 'Mobile Phone', 'category': 'Electronics', 'price': '₹12000'},
+{'name': 'Laptop', 'category': 'Electronics', 'price': '₹45000'},
+{'name': 'Shoes', 'category': 'Fashion', 'price': '₹1500'},
+{'name': 'Watch', 'category': 'Fashion', 'price': '₹2000'},
+{'name': 'Headphones', 'category': 'Electronics', 'price': '₹999'},
+{'name': 'Backpack', 'category': 'Accessories', 'price': '₹800'},
+];
+
+
+String searchText = '';
+String selectedCategory = 'All';
+
+
+@override
+Widget build(BuildContext context) {
+
+
+List<Map<String, String>> filteredProducts = products.where((product) {
+bool matchesSearch = product['name']!
+.toLowerCase()
+ 
+.contains(searchText.toLowerCase());
+
+
+bool matchesCategory = selectedCategory == 'All' || product['category'] == selectedCategory;
+
+return matchesSearch && matchesCategory;
+}).toList();
+
+
+return Scaffold( appBar: AppBar(
+title: const Text('Product Search'), backgroundColor: Colors.blue,
+),
+
+
+body: Padding(
+padding: const EdgeInsets.all(16),
+
+
+child: Column( children: [
+
+TextField(
+decoration: const InputDecoration( labelText: 'Search Product', prefixIcon: Icon(Icons.search), border: OutlineInputBorder(),
+),
+
+
+onChanged: (value) { setState(() { searchText = value;
+});
+ 
+},
+),
+
+
+const SizedBox(height: 15),
+
+
+DropdownButtonFormField<String>( value: selectedCategory,
+decoration: const InputDecoration( labelText: 'Select Category', border: OutlineInputBorder(),
+),
+
+
+items: ['All', 'Electronics', 'Fashion', 'Accessories']
+.map((category) {
+return DropdownMenuItem( value: category,
+child: Text(category),
+);
+}).toList(),
+
+
+onChanged: (value) { setState(() { selectedCategory = value!;
+});
+},
+),
+
+
+const SizedBox(height: 15),
+
+
+Expanded(
+child: ListView.builder(
+ 
+itemCount: filteredProducts.length,
+
+
+itemBuilder: (context, index) {
+final product = filteredProducts[index];
+
+
+return Card( child: ListTile(
+leading: const Icon( Icons.shopping_bag, color: Colors.blue,
+),
+
+
+title: Text(product['name']!),
+
+
+subtitle: Text(product['category']!),
+
+
+trailing: Text( product['price']!, style: const TextStyle(
+fontWeight: FontWeight.bold, color: Colors.green,
+),
+),
+),
+);
+},
+),
+),
+],
+),
+),
+ 
+);
+}
+}
