@@ -1,0 +1,126 @@
+
+import 'package:flutter/material.dart';
+
+
+void main() { runApp(const MyApp());
+}
+
+
+class MyApp extends StatelessWidget { const MyApp({super.key});
+
+@override
+Widget build(BuildContext context) { return const MaterialApp(
+ 
+debugShowCheckedModeBanner: false, home: MileageCalculator(),
+);
+}
+}
+
+
+class MileageCalculator extends StatefulWidget { const MileageCalculator({super.key});
+
+@override
+State<MileageCalculator> createState() =>
+_MileageCalculatorState();
+}
+
+
+class _MileageCalculatorState extends State<MileageCalculator> { final _formKey = GlobalKey<FormState>();
+
+final distanceController = TextEditingController(); final fuelController = TextEditingController();
+
+String result = '';
+
+
+void calculateMileage() {
+if (_formKey.currentState!.validate()) { double distance =
+double.parse(distanceController.text);
+
+
+double fuel = double.parse(fuelController.text);
+
+double mileage = distance / fuel;
+ 
+setState(() {
+result = 'Car Mileage: ${mileage.toStringAsFixed(2)} km/l';
+});
+}
+}
+
+
+@override
+void dispose() { distanceController.dispose(); fuelController.dispose(); super.dispose();
+}
+
+
+@override
+Widget build(BuildContext context) { return Scaffold(
+appBar: AppBar(
+title: const Text('Car Mileage Calculator'), backgroundColor: Colors.blue,
+),
+
+
+body: Padding(
+padding: const EdgeInsets.all(20),
+
+
+child: Form( key: _formKey,
+
+child: Column( children: [ TextFormField(
+ 
+controller: distanceController, keyboardType: TextInputType.number, decoration: const InputDecoration( labelText: 'Distance Travelled (km)', border: OutlineInputBorder(),
+),
+validator: (value) {
+if (value == null || value.isEmpty) { return 'Please enter distance';
+}
+if (double.tryParse(value) == null || double.parse(value) <= 0) {
+return 'Enter a valid positive number';
+}
+return null;
+},
+),
+
+
+const SizedBox(height: 20),
+
+
+TextFormField(
+controller: fuelController, keyboardType: TextInputType.number, decoration: const InputDecoration( labelText: 'Fuel Consumed (litres)', border: OutlineInputBorder(),
+),
+validator: (value) {
+if (value == null || value.isEmpty) { return 'Please enter fuel consumed';
+}
+ 
+if (double.tryParse(value) == null || double.parse(value) <= 0) {
+return 'Enter a valid positive number';
+}
+return null;
+},
+),
+
+
+const SizedBox(height: 25),
+
+
+ElevatedButton(
+onPressed: calculateMileage,
+child: const Text('Calculate Mileage'),
+),
+
+
+const SizedBox(height: 20),
+
+
+Text( result,
+style: const TextStyle( fontSize: 20,
+fontWeight: FontWeight.bold, color: Colors.green,
+),
+),
+],
+),
+),
+),
+);
+}
+ 
+}
